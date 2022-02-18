@@ -12,7 +12,6 @@ namespace Blackjack
     class Deck
     {
         public Deck(int id = 65535) {
-            Console.WriteLine("Deck instantiated.");
             setID(id);
             build();
         }

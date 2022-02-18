@@ -23,10 +23,7 @@ namespace Blackjack
         public Card(int deckID = 0, CardIDs cardID = CardIDs.C2)
         {
             
-           // string cardKey = cardID.ToString();
             string cardKey = Enum.GetName(typeof(CardIDs), cardID).ToString();
-
-            //int cardValue = Enum.GetValues(typeof(FaceValues),cardID));
             int cardValue = (int)Enum.Parse(typeof(FaceValues), cardKey);
 
 
@@ -56,7 +53,7 @@ namespace Blackjack
 
             }
 
-            string whichCard = cardKey.Substring(1, cardKey.Length - 1);
+            string whichCard = cardKey.Substring(1, 1);
 
 
             setDeckID(deckID);
@@ -64,15 +61,6 @@ namespace Blackjack
             setCardKey(cardKey);
             setCardValue(cardValue);
             setCardFace(whichCard);
-
-            
-            Console.Write("Card::Card called.");
-            Console.Write(", deckID: {0}", deckID);
-            Console.Write(", cardID: {0}", cardID.ToString());
-            Console.Write(", cardValue: {0}", cardKey);
-            Console.Write(", whichCard: {0}", cardKey);
-            Console.Write(", whichSuit: {0}\n", getCardSuit().ToString());
-            /**/
         }
 
         public string getCardKey()
@@ -84,6 +72,7 @@ namespace Blackjack
         {
             CardKey = key;
         }
+
         public int getCardValue()
         {
             return CardValue;

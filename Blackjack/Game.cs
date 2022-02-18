@@ -60,7 +60,7 @@ namespace Blackjack
         {
             Player p = new Player(name, isDealer, Players.Count());
             add(p);
-            if ( getPlayerCount() == getMaxPlayers() ) State = GameStates.START;
+            if ( getPlayerCount() == getMaxPlayers() ) setState(GameStates.START);
         }
 
         private void add(Player p)
@@ -150,15 +150,36 @@ namespace Blackjack
 
         public void start()
         {
+            setState(GameStates.START);
+
+            // to hold and process any cards from previous players
+            List<Card> playerHands;
+            Deck temp = Shoe.ElementAt(0);
+
+            // Return any cards in players hands
+            foreach(Player p in Players)
+            {
+                playerHands = p.returnCards();
+                while(playerHands.Count() > 0)
+                {
+                    temp.replace(playerHands.ElementAt(0));
+                    playerHands.RemoveAt(0);
+                }
+            }
+
             // Shuffle each deck in the Shoe
             shuffleCards();
 
+            // Deal 2 cards to each player
             foreach (Player p in Players)
             {
                 p.takeCard(Shoe.ElementAt(0).deal());
                 p.takeCard(Shoe.ElementAt(0).deal());
             }
+
+            // Change state
             setState(GameStates.PLAYER_TURN);
+
         }
 
         // Deal card to player
@@ -169,36 +190,69 @@ namespace Blackjack
                 Player p = Players.ElementAt(playerID);
                 p.takeCard(Shoe.ElementAt(0).deal());
             }
-
+            gameResults();
         }
 
         public void deal()
         {
-            if (Players.Count() > 1) { 
-                Player p = Players.ElementAt(1);
-                if (p.getScore() == 21)
-                {
-                    State = GameStates.PLAYER_WIN;
+            // Determine game state
+            gameResults();
+        }
 
-                }
-                else if (p.getScore() < 21)
+        private void gameResults()
+        {
+            Player dealer;
+            Player player;
+            if (Players.Count() > 0) dealer = Players.ElementAt(0); else return;
+            if (Players.Count() > 1) player = Players.ElementAt(1); else return;
+
+            // Check whose turn it is
+            if ( getState() == GameStates.PLAYER_TURN )
+            {
+                // Player Turen
+                if (player.getScore() == 21 )
                 {
-                    p.takeCard(Shoe.ElementAt(0).deal());
-                    if (p.getScore() > 21)
-                    {
-                        State = GameStates.DEALER_WIN;
-                    }
-                }
-                else
+                    setState(GameStates.PLAYER_WIN);
+                } else if (player.getScore() > 21)
                 {
-                    State = GameStates.DEALER_WIN;
+                    setState(GameStates.DEALER_WIN);
+                }
+
+            } else
+            {
+                // Dealer Turn
+                if (dealer.getScore() > 21)
+                {
+                    // Dealer bust
+                    setState(GameStates.PLAYER_WIN);
+                }
+                else if (player.getScore() == dealer.getScore())
+                {
+                    setState(GameStates.TIE);
+                }
+                else if (player.getScore() > dealer.getScore())
+                {
+                    setState(GameStates.PLAYER_WIN);
+                }
+                else if (player.getScore() < dealer.getScore() )
+                {
+                    setState(GameStates.DEALER_WIN);
                 }
             }
+
+            
         }
 
         public void stand()
         {
-            State = GameStates.DEALER_TURN;
+
+            setState(GameStates.DEALER_TURN);
+            int score = Players.ElementAt(0).getScore(); ;
+            while (score < 17) {
+                deal(0);
+                score += Players.ElementAt(0).getScore();
+            }
+            gameResults();
         }
 
         public string getPlayerName(int i)
@@ -223,7 +277,6 @@ namespace Blackjack
         
         public List<CardIDs> getHand(int i)
         {
-            Console.WriteLine("Game::getHand({0}) called",  i);
             if (i < getPlayerCount() )
             {
                 return Players[i].getHand();

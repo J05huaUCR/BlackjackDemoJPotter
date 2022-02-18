@@ -153,8 +153,9 @@
             // gameStatusToolStripMenuItem
             // 
             this.gameStatusToolStripMenuItem.CheckOnClick = true;
+            this.gameStatusToolStripMenuItem.Enabled = false;
             this.gameStatusToolStripMenuItem.Name = "gameStatusToolStripMenuItem";
-            this.gameStatusToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.gameStatusToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.gameStatusToolStripMenuItem.Text = "Game Status";
             this.gameStatusToolStripMenuItem.Click += new System.EventHandler(this.gameStatusToolStripMenuItem_Click);
             // 
@@ -295,20 +296,7 @@
         }
 
         #endregion
-        /*
-        private System.Windows.Forms.StatusStrip statusStrip;
-        private System.Windows.Forms.MenuStrip menuStrip;
-        private System.Windows.Forms.ToolStripMenuItem menuToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem restartToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.Label deckLabel;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripDealerScore;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripPlayerScore;
-        private System.Diagnostics.Process process1;
-        private System.Windows.Forms.ToolStripMenuItem dealToolStripMenuItem;
-        */
+
         private System.Windows.Forms.StatusStrip statusBar;
         private System.Windows.Forms.MenuStrip mainMenu;
         private System.Windows.Forms.ToolStripMenuItem gameToolStripMenuItem;
